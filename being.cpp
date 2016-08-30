@@ -2,110 +2,93 @@
 
 Being::Being(std::string n)
 {
-	setName(n);
-	setLevel(1);
-	setHealth(getMaxHealth());
+	_name = n;
+	_level = 1;
+	_health = maxHealth();
+	_power = 6;
+	_resistance = 2;
 }
 
 Being::Being(std::string n, short l)
 {
-	setName(n);
-	setLevel(l);
-	setHealth(getMaxHealth());
+	_name = n;
+	_level = l;
+	_health = maxHealth();
+	_power = 5*l;
+	_resistance = 2*l;
 }
 
-AttackMessage Being::attack(Being& victim)
+AttackMessage Being::attack(Being& victim, Skill& s)
 {
 	AttackMessage attackMessage;
-	int damage = getPower();
-	attackMessage.attacker = getName();
-	attackMessage.defender = victim.getName();
+	int damage = _power*s.use();
+	attackMessage.attacker = name();
+	attackMessage.defender = victim.name();
 	attackMessage.damage = victim.receiveDamage(damage);
-	attackMessage.hp_left = victim.getHealth();
+	attackMessage.hp_left = victim.currentHealth();
 	return attackMessage;
+}
+
+void Being::learnSkill(Skill& s)
+{
+	_skills.push_back(s);
+	skill = _skills.begin();
+}
+
+bool Being::knows(std::string spell_name)
+{
+	for (skill = _skills.begin(); skill != _skills.end(); skill++)
+	{
+		if (spell_name.compare(skill->spell()))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+void Being::use(std::string spell_name)
+{
+	// TODO
 }
 
 int Being::receiveDamage(int dmg)
 {
-	dmg -= getResistance();
+	dmg -= _resistance;
 	if (dmg < 1)
 		dmg = 1;
-	setHealth(getHealth()-dmg);
+	_health -= dmg;
 	return dmg;
 }
 
-std::string Being::getName()
+std::string Being::name()
 {
 	return _name;
 }
 
-void Being::setName(std::string n)
-{
-	_name = n;
-}
-
-short Being::getHealth()
+int Being::currentHealth()
 {
 	return _health;
 }
 
-void Being::setHealth(short hp)
+int Being::maxHealth()
 {
-	_health = hp;
+	return 20+level()*6;
 }
 
-short Being::getMaxHealth()
+bool Being::isAlive()
 {
-	return 10+(getLevel()*4);
+	if (_health > 0)
+		return true;
+	return false;
 }
 
-void Being::setMaxHealth(short mh)
-{
-	// TODO
-	// Not sure if function is neccesary
-	_maxHealth = mh;
-}
-
-short Being::getPower()
-{
-	return 3+(getLevel());
-}
-
-void Being::setPower(short p)
-{
-	// TODO
-	// Not sure if function is neccesary
-	_power = p;
-}
-
-short Being::getResistance()
-{
-	return 1+(getLevel());
-}
-
-void Being::setResistance(short r)
-{
-	// TODO
-	// Not sure if function is neccesary
-	_resistance = r;
-}
-
-short Being::getLevel()
+int Being::level()
 {
 	return _level;
 }
 
-void Being::setLevel(short l)
-{
-	_level = l;
-}
-
-int Being::getExperience()
+int Being::experience()
 {
 	return _experience;
-}
-
-void Being::setExperience(int exp)
-{
-	_experience = exp;
 }

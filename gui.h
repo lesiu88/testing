@@ -14,6 +14,7 @@ namespace gui
 	void printAttackMessage(AttackMessage);
 	void printWindow(std::string, std::vector<std::string>);
 	int getUserChoice(int);
+	std::string getUserVerbalChoice();
 	std::string combine(std::string, std::string, std::string::size_type);
 	std::string printLine(std::string line, std::string border, unsigned short size, unsigned short padding);
 	std::string to_string(double value);

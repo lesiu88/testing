@@ -1,8 +1,10 @@
 #ifndef GUARD_BEING_H
 #define GUARD_BEING_H
 
-#include <string>
+#include "skill.h"
 
+#include <string>
+#include <vector>
 
 struct AttackMessage
 {
@@ -16,15 +18,18 @@ class Being
 {
 	private:
 		std::string		_name;
-		short			_health;
-		short			_maxHealth;
+		int						_health;
+		int						_maxHealth;
 
-		short			_power;
-		short			_resistance;
+		int						_power;
+		int						_resistance;
 
-		short			_level;
-		int				_experience;
-		short			_expYield;
+		int						_level;
+		int						_experience;
+		int						_expYield;
+		
+		std::vector<Skill> _skills;
+		std::vector<Skill>::iterator skill;
 
 	public:
 		/*	+++ CONSTUCTORS +++ */
@@ -37,29 +42,20 @@ class Being
 
 		/* +++ SETTERS AND GETTERS +++ */
 
-		std::string		getName();
-		void			setName(std::string);
+		std::string name();
 
-		short			getHealth();
-		void			setHealth(short);
+		int currentHealth();
+		int maxHealth();
+		bool isAlive();
+		int level();
+		int experience();
+		bool knows(std::string);
+		void use(std::string);
+		
+		void learnSkill(Skill&);
 
-		short			getMaxHealth();
-		void			setMaxHealth(short);
-
-		short			getPower();
-		void			setPower(short);
-
-		short			getResistance();
-		void			setResistance(short);
-
-		short			getLevel();
-		void			setLevel(short);
-
-		int				getExperience();
-		void			setExperience(int);
-
-		AttackMessage	attack(Being&);
-		int				receiveDamage(int);
+		AttackMessage	attack(Being&, Skill&);
+		int receiveDamage(int);
 };
 
 #endif

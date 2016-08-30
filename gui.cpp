@@ -35,7 +35,16 @@ int gui::getUserChoice(int max)
 		std::getline(std::cin, line);
 		choice = atoi(line.c_str());
 	}
+	
+	std::cout << "\b\b";
 	return choice;
+}
+
+std::string gui::getUserVerbalChoice()
+{
+	std::string line;
+	std::getline(std::cin, line);
+	return line;
 }
 
 // Print attack message
@@ -59,20 +68,18 @@ void gui::printStats(Being& being)
 {
 	// Vector to hold being's stats that will be printed
 	std::vector<std::string> lines;
-	std::string::size_type length = being.getName().size();
+	std::string::size_type length = being.name().size();
 
 	// Check if name isn't too short
 	if (length < 12)
 		length = 12;
 
 	// Add lines to print
-	lines.push_back(combine("Level:", to_string(being.getLevel()), length));
-	lines.push_back(combine("Health:", to_string(being.getHealth()), length));
-	lines.push_back(combine("Power:", to_string(being.getPower()), length));
-	lines.push_back(combine("Def:", to_string(being.getResistance()), length));
+	lines.push_back(combine("Level:", to_string(being.level()), length));
+	lines.push_back(combine("Health:", to_string(being.currentHealth()), length));
 
 	// Pass name as a title, and stats as lines in a vector
-	printWindow(being.getName(), lines);
+	printWindow(being.name(), lines);
 }
 
 // Combine two strings in one
